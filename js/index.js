@@ -6,6 +6,12 @@ const getWeekNumber = (date) => {
   return Math.ceil((daysPassed + firstDayOfYearDayOfWeek) / 7);
 };
 
+const isLeapYear = (year) => {
+  if (year % 4 !== 0) return false;
+  if (year % 100 === 0 && year % 400 !== 0) return false;
+  if ((year % 100 === 0 && year % 400 === 0) || year % 100 !== 0) return true;
+};
+
 // dayOfWeek: 1 - Sunday -> 7 - Saturday
 class Day {
   constructor(date = null, lang = 'default') {
@@ -54,9 +60,46 @@ class Day {
   }
 }
 
+class Month {
+  constructor(date = null, lang = 'default') {
+    const day = new Day(date, lang);
+    const daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    this.lang = lang;
+
+    this.name = day.month;
+    this.monthNumber = day.monthNumber;
+    this.year = day.year;
+    this.numberOfDays = daysInMonths[this.monthNumber - 1];
+
+    if (this.monthNumber === 2) {
+      this.numberOfDays += isLeapYear(this.year) ? 1 : 0;
+    }
+
+    this[Symbol.iterator] = function* () {
+      let number = 1;
+      yield this.getDay(number);
+      while (number < this.numberOfDays) {
+        ++number;
+        yield this.getDay(number);
+      }
+    };
+  }
+
+  getDay(day) {
+    return new Day(new Date(this.year, this.monthNumber - 1, day), this.lang);
+  }
+}
+
 const birthday = new Date(2021, 4, 26);
 const day = new Day(birthday, 'en');
 
 console.log(day);
 console.log(day.isToday);
 console.log(day.format('DDW, DD de MMN de YYYY'));
+
+const month = new Month();
+console.log(month);
+
+for (const day of month) {
+  console.log('day', day.dayOfWeek);
+}
