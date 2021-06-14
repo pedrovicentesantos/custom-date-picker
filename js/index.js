@@ -76,17 +76,42 @@ class Month {
     }
 
     this[Symbol.iterator] = function* () {
-      let number = 1;
-      yield this.getDay(number);
-      while (number < this.numberOfDays) {
-        ++number;
-        yield this.getDay(number);
+      let day = 1;
+      yield this.getDay(day);
+      while (day < this.numberOfDays) {
+        ++day;
+        yield this.getDay(day);
       }
     };
   }
 
   getDay(day) {
     return new Day(new Date(this.year, this.monthNumber - 1, day), this.lang);
+  }
+}
+
+class Year {
+  constructor(year = null, monthNumber = null, lang = 'default') {
+    this.today = new Day(null, lang);
+    this.year = year ?? this.today.year;
+    this.month = new Month(
+      new Date(this.year, (monthNumber || this.today.monthNumber) - 1),
+      lang
+    );
+    this.lang = lang;
+
+    this[Symbol.iterator] = function* () {
+      let month = 1;
+      yield this.getMonth(month);
+      while (month < 13) {
+        ++month;
+        yield this.getMonth(month);
+      }
+    };
+  }
+
+  getMonth(month) {
+    return new Month(new Date(this.year, month - 1), this.lang);
   }
 }
 
@@ -102,4 +127,10 @@ console.log(month);
 
 for (const day of month) {
   console.log('day', day.dayOfWeek);
+}
+
+const year = new Year();
+console.log(year);
+for (const month of year) {
+  console.log(month);
 }
