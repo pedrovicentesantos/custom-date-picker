@@ -60,6 +60,7 @@ class Day {
   }
 }
 
+// 1 - January -> 11 -> December
 class Month {
   constructor(date = null, lang = 'default') {
     const day = new Day(date, lang);
@@ -77,10 +78,9 @@ class Month {
 
     this[Symbol.iterator] = function* () {
       let day = 1;
-      yield this.getDay(day);
-      while (day < this.numberOfDays) {
-        ++day;
+      while (day <= this.numberOfDays) {
         yield this.getDay(day);
+        day++;
       }
     };
   }
@@ -102,16 +102,91 @@ class Year {
 
     this[Symbol.iterator] = function* () {
       let month = 1;
-      yield this.getMonth(month);
-      while (month < 13) {
-        ++month;
+      while (month <= 12) {
         yield this.getMonth(month);
+        month++;
       }
     };
   }
 
   getMonth(month) {
     return new Month(new Date(this.year, month - 1), this.lang);
+  }
+
+  get isLeapYear() {
+    return isLeapYear(this.year);
+  }
+}
+
+class Calendar extends Year {
+  weekDays = Array.from({ length: 7 });
+
+  constructor(year = null, monthNumber = null, lang = 'default') {
+    super(year, monthNumber, lang);
+
+    this.weekDays.forEach((_, i) => {
+      const day = this.month.getDay(i);
+      console.log(day);
+      if (!this.weekDays.includes(day.dayOfWeek)) {
+        this.weekDays[day.dayOfWeekNumber - 1] = day.dayOfWeek;
+      }
+    });
+  }
+
+  getPreviousMonth() {
+    if (this.month.monthNumber === 1) {
+      return new Month(new Date(this.year - 1, 11), this.lang);
+    }
+
+    return new Month(
+      new Date(this.year, this.month.monthNumber - 2),
+      this.lang
+    );
+  }
+
+  getNextMonth() {
+    if (this.month.monthNumber === 11) {
+      return new Month(new Date(this.year + 1, 0), this.lang);
+    }
+
+    return new Month(new Date(this.year, this.month.monthNumber), this.lang);
+  }
+
+  goToSpecificDate(monthNumber, year) {
+    this.month = new Month(new Date(year, monthNumber - 1), this.lang);
+    this.year = year;
+  }
+
+  goToPreviousYear() {
+    this.year -= 1;
+    this.month = new Month(new Date(this.year, 11), this.lang);
+  }
+
+  goToNextYear() {
+    this.year += 1;
+    this.month = new Month(new Date(this.year, 0), this.lang);
+  }
+
+  goToPreviousMonth() {
+    if (this.month.monthNumber === 1) {
+      return this.goToPreviousYear();
+    }
+
+    this.month = new Month(
+      new Date(this.year, this.month.monthNumber - 2),
+      this.lang
+    );
+  }
+
+  goToNextMonth() {
+    if (this.month.monthNumber === 11) {
+      return this.goToNextYear();
+    }
+
+    this.month = new Month(
+      new Date(this.year, this.month.monthNumber),
+      this.lang
+    );
   }
 }
 
@@ -126,7 +201,7 @@ const month = new Month();
 console.log(month);
 
 for (const day of month) {
-  console.log('day', day.dayOfWeek);
+  console.log('day', day.day);
 }
 
 const year = new Year();
@@ -134,3 +209,11 @@ console.log(year);
 for (const month of year) {
   console.log(month);
 }
+
+const calendar = new Calendar(2020, 12);
+console.log(calendar);
+for (const month of calendar) {
+  console.log(month);
+}
+
+console.log(calendar.getNextMonth());
