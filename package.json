@@ -1,0 +1,23 @@
+{
+  "name": "custom_date_picker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedrovicentesantos/custom-date-picker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pedrovicentesantos/custom-date-picker/issues"
+  },
+  "homepage": "https://github.com/pedrovicentesantos/custom-date-picker#readme",
+  "devDependencies": {
+    "jest": "^27.0.4"
+  }
+}

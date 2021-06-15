@@ -12,13 +12,14 @@ const isLeapYear = (year) => {
   if ((year % 100 === 0 && year % 400 === 0) || year % 100 !== 0) return true;
 };
 
-// dayOfWeek: 1 - Sunday -> 7 - Saturday
 class Day {
+  // dayOfWeekNumber: 1 - Sunday -> 7 - Saturday
+  // monthNumber: 1 - January -> 12 - December
   constructor(date = null, lang = 'default') {
     date = date ?? new Date();
 
-    this.Date = date;
-    this.day = date.getDate();
+    this.date = date;
+    this.dayNumber = date.getDate();
     this.dayOfWeekNumber = date.getDay() + 1;
     this.dayOfWeek = date.toLocaleString(lang, { weekday: 'long' });
     this.dayOfWeekShort = date.toLocaleString(lang, { weekday: 'short' });
@@ -37,9 +38,9 @@ class Day {
 
   isEqual(date) {
     // Can receive Date or Day
-    date = date instanceof Day ? date.Date : date;
+    date = date instanceof Day ? date.date : date;
     return (
-      date.getDate() === this.day &&
+      date.getDate() === this.dayNumber &&
       date.getMonth() === this.monthNumber - 1 &&
       date.getFullYear() === this.year
     );
@@ -47,8 +48,8 @@ class Day {
 
   format(formatString) {
     return formatString
-      .replace(/\bD\b/, this.day)
-      .replace(/\bDD\b/, this.day.toString().padStart(2, '0'))
+      .replace(/\bD\b/, this.dayNumber)
+      .replace(/\bDD\b/, this.dayNumber.toString().padStart(2, '0'))
       .replace(/\bDW\b/, this.dayOfWeekShort)
       .replace(/\bDDW\b/, this.dayOfWeek)
       .replace(/\bM\b/, this.monthNumber)
@@ -60,8 +61,8 @@ class Day {
   }
 }
 
-// 1 - January -> 11 -> December
 class Month {
+  // monthNumber: 1 - January -> 12 - December
   constructor(date = null, lang = 'default') {
     const day = new Day(date, lang);
     const daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -190,30 +191,6 @@ class Calendar extends Year {
   }
 }
 
-const birthday = new Date(2021, 4, 26);
-const day = new Day(birthday, 'en');
-
-console.log(day);
-console.log(day.isToday);
-console.log(day.format('DDW, DD de MMN de YYYY'));
-
-const month = new Month();
-console.log(month);
-
-for (const day of month) {
-  console.log('day', day.day);
-}
-
-const year = new Year();
-console.log(year);
-for (const month of year) {
-  console.log(month);
-}
-
-const calendar = new Calendar(2020, 12);
-console.log(calendar);
-for (const month of calendar) {
-  console.log(month);
-}
-
-console.log(calendar.getNextMonth());
+module.exports = {
+  Day
+};
