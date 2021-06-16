@@ -1,4 +1,5 @@
 const Day = require('../index').Day;
+const Month = require('../index').Month;
 
 describe('Day Class', () => {
   let day;
@@ -91,5 +92,55 @@ describe('Day Class', () => {
     expect(day.weekDayNumber).toBe(today.getDay() + 1);
     expect(day.monthNumber).toBe(today.getMonth() + 1);
     expect(day.year).toBe(today.getFullYear());
+  });
+});
+
+describe('Month Class', () => {
+  let month;
+  const birthday = new Date(2021, 4, 26);
+  beforeAll(() => {
+    month = new Month(birthday, 'en');
+  });
+
+  it('should return the correct month name', () => {
+    expect(month.name).toBe('May');
+  });
+
+  it('should return the correct month number', () => {
+    expect(month.monthNumber).toBe(5);
+  });
+
+  it('should return the correct number of days', () => {
+    expect(month.year).toBe(2021);
+  });
+
+  it('should return the correct number of days in month', () => {
+    expect(month.numberOfDays).toBe(31);
+  });
+
+  it('month object should be iterable', () => {
+    expect(month[Symbol.iterator]).toBeDefined();
+  });
+
+  it('should have 29 days in February in leap year', () => {
+    const date = new Date(2020, 1, 24);
+    const month = new Month(date);
+    expect(month.numberOfDays).toBe(29);
+    expect(month.numberOfDays).not.toBe(28);
+  });
+
+  it(`should have 28 days in February in a year that's not a leap year`, () => {
+    const date = new Date(2021, 1, 24);
+    const month = new Month(date);
+    expect(month.numberOfDays).toBe(28);
+    expect(month.numberOfDays).not.toBe(29);
+  });
+
+  it('should return today if no date passed', () => {
+    const today = new Date();
+    const month = new Month(null, 'en');
+    expect(month.monthNumber).toBe(today.getMonth() + 1);
+    expect(month.year).toBe(today.getFullYear());
+    expect(month.name).toBe(today.toLocaleString('en', { month: 'long' }));
   });
 });
