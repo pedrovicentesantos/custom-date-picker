@@ -13,16 +13,16 @@ const isLeapYear = (year) => {
 };
 
 class Day {
-  // dayOfWeekNumber: 1 - Sunday -> 7 - Saturday
+  // weekDayNumber: 1 - Sunday -> 7 - Saturday
   // monthNumber: 1 - January -> 12 - December
   constructor(date = null, lang = 'default') {
     date = date ?? new Date();
 
     this.date = date;
     this.dayNumber = date.getDate();
-    this.dayOfWeekNumber = date.getDay() + 1;
-    this.dayOfWeek = date.toLocaleString(lang, { weekday: 'long' });
-    this.dayOfWeekShort = date.toLocaleString(lang, { weekday: 'short' });
+    this.weekDayNumber = date.getDay() + 1;
+    this.weekDay = date.toLocaleString(lang, { weekday: 'long' });
+    this.weekDayShort = date.toLocaleString(lang, { weekday: 'short' });
     this.monthNumber = date.getMonth() + 1;
     this.month = date.toLocaleString(lang, { month: 'long' });
     this.monthShort = date.toLocaleString(lang, { month: 'short' });
@@ -50,8 +50,8 @@ class Day {
     return formatString
       .replace(/\bD\b/, this.dayNumber)
       .replace(/\bDD\b/, this.dayNumber.toString().padStart(2, '0'))
-      .replace(/\bDW\b/, this.dayOfWeekShort)
-      .replace(/\bDDW\b/, this.dayOfWeek)
+      .replace(/\bDW\b/, this.weekDayShort)
+      .replace(/\bDDW\b/, this.weekDay)
       .replace(/\bM\b/, this.monthNumber)
       .replace(/\bMM\b/, this.monthNumber.toString().padStart(2, '0'))
       .replace(/\bMN\b/, this.monthShort)
@@ -128,8 +128,8 @@ class Calendar extends Year {
     this.weekDays.forEach((_, i) => {
       const day = this.month.getDay(i);
       console.log(day);
-      if (!this.weekDays.includes(day.dayOfWeek)) {
-        this.weekDays[day.dayOfWeekNumber - 1] = day.dayOfWeek;
+      if (!this.weekDays.includes(day.weekDay)) {
+        this.weekDays[day.weekDayNumber - 1] = day.weekDay;
       }
     });
   }

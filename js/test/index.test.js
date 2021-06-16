@@ -12,15 +12,15 @@ describe('Day Class', () => {
   });
 
   it('should return the correct day of week number', () => {
-    expect(day.dayOfWeekNumber).toBe(4);
+    expect(day.weekDayNumber).toBe(4);
   });
 
   it('should return the correct day of week', () => {
-    expect(day.dayOfWeek).toBe('Wednesday');
+    expect(day.weekDay).toBe('Wednesday');
   });
 
   it('should return the correct short day of week', () => {
-    expect(day.dayOfWeekShort).toBe('Wed');
+    expect(day.weekDayShort).toBe('Wed');
   });
 
   it('should return the correct month number', () => {
@@ -77,8 +77,8 @@ describe('Day Class', () => {
     const day = new Day(birthday, 'pt-br');
     expect(day.monthShort).toBe('mai.');
     expect(day.month).toBe('maio');
-    expect(day.dayOfWeek).toBe('quarta-feira');
-    expect(day.dayOfWeekShort).toBe('qua.');
+    expect(day.weekDay).toBe('quarta-feira');
+    expect(day.weekDayShort).toBe('qua.');
     const string = 'quarta-feira, 26 de maio de 2021';
     expect(day.format('DDW, DD de MMN de YYYY')).toBe(string);
   });
@@ -88,7 +88,7 @@ describe('Day Class', () => {
     const day = new Day();
 
     expect(day.dayNumber).toBe(today.getDate());
-    expect(day.dayOfWeekNumber).toBe(today.getDay() + 1);
+    expect(day.weekDayNumber).toBe(today.getDay() + 1);
     expect(day.monthNumber).toBe(today.getMonth() + 1);
     expect(day.year).toBe(today.getFullYear());
   });
