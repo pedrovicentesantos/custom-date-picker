@@ -128,7 +128,6 @@ class Calendar extends Year {
     this.today = new Day(null, lang);
     this.weekDays.forEach((_, i) => {
       const day = this.month.getDay(i);
-      console.log(day);
       if (!this.weekDays.includes(day.weekDay)) {
         this.weekDays[day.weekDayNumber - 1] = day.weekDay;
       }
@@ -181,7 +180,7 @@ class Calendar extends Year {
   }
 
   goToNextMonth() {
-    if (this.month.monthNumber === 11) {
+    if (this.month.monthNumber === 12) {
       return this.goToNextYear();
     }
 
