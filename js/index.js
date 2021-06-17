@@ -195,5 +195,7 @@ module.exports = {
   Day,
   Month,
   Year,
-  Calendar
+  Calendar,
+  getWeekNumber,
+  isLeapYear
 };

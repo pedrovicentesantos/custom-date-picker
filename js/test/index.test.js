@@ -2,6 +2,8 @@ const Day = require('../index').Day;
 const Month = require('../index').Month;
 const Year = require('../index').Year;
 const Calendar = require('../index').Calendar;
+const getWeekNumber = require('../index').getWeekNumber;
+const isLeapYear = require('../index').isLeapYear;
 
 describe('Day Class', () => {
   let day;
@@ -289,8 +291,35 @@ describe('Calendar Class', () => {
     expect(calendar.month.monthNumber).toBe(6);
     const december = new Calendar(2021, 12);
     december.goToNextMonth();
-    console.log(december);
     expect(december.year).toBe(2022);
     expect(december.month.monthNumber).toBe(1);
+  });
+});
+
+describe('getWeekNumber function', () => {
+  it('should return 1 for first week of the year', () => {
+    const date = new Date(2021, 0, 1);
+    const weekNumber = getWeekNumber(date);
+    expect(weekNumber).toBe(1);
+  });
+
+  it('should return 53 for the last week of year 2021', () => {
+    const date = new Date(2021, 11, 31);
+    const weekNumber = getWeekNumber(date);
+    expect(weekNumber).toBe(53);
+  });
+});
+
+describe('isLeapYear function', () => {
+  it('should return true for leap years', () => {
+    expect(isLeapYear(2000)).toBe(true);
+    expect(isLeapYear(2020)).toBe(true);
+    expect(isLeapYear(2104)).toBe(true);
+  });
+
+  it(`should return false for years that aren't leap year`, () => {
+    expect(isLeapYear(2021)).toBe(false);
+    expect(isLeapYear(2100)).toBe(false);
+    expect(isLeapYear(2200)).toBe(false);
   });
 });
