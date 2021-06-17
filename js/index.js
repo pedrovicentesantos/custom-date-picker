@@ -93,10 +93,10 @@ class Month {
 
 class Year {
   constructor(year = null, monthNumber = null, lang = 'default') {
-    this.today = new Day(null, lang);
-    this.year = year ?? this.today.year;
+    const today = new Day(null, lang);
+    this.year = year ?? today.year;
     this.month = new Month(
-      new Date(this.year, (monthNumber || this.today.monthNumber) - 1),
+      new Date(this.year, (monthNumber || today.monthNumber) - 1),
       lang
     );
     this.lang = lang;
@@ -125,6 +125,7 @@ class Calendar extends Year {
   constructor(year = null, monthNumber = null, lang = 'default') {
     super(year, monthNumber, lang);
 
+    this.today = new Day(null, lang);
     this.weekDays.forEach((_, i) => {
       const day = this.month.getDay(i);
       console.log(day);
@@ -193,5 +194,6 @@ class Calendar extends Year {
 
 module.exports = {
   Day,
-  Month
+  Month,
+  Year
 };

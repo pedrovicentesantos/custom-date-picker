@@ -1,5 +1,6 @@
 const Day = require('../index').Day;
 const Month = require('../index').Month;
+const Year = require('../index').Year;
 
 describe('Day Class', () => {
   let day;
@@ -8,47 +9,47 @@ describe('Day Class', () => {
     day = new Day(birthday, 'en');
   });
 
-  it('should return the correct day of month', () => {
+  it('should have the correct day of month', () => {
     expect(day.dayNumber).toBe(26);
   });
 
-  it('should return the correct day of week number', () => {
+  it('should have the correct day of week number', () => {
     expect(day.weekDayNumber).toBe(4);
   });
 
-  it('should return the correct day of week', () => {
+  it('should have the correct day of week', () => {
     expect(day.weekDay).toBe('Wednesday');
   });
 
-  it('should return the correct short day of week', () => {
+  it('should have the correct short day of week', () => {
     expect(day.weekDayShort).toBe('Wed');
   });
 
-  it('should return the correct month number', () => {
+  it('should have the correct month number', () => {
     expect(day.monthNumber).toBe(5);
   });
 
-  it('should return the correct month', () => {
+  it('should have the correct month', () => {
     expect(day.month).toBe('May');
   });
 
-  it('should return the correct short month', () => {
+  it('should have the correct short month', () => {
     expect(day.monthShort).toBe('May');
   });
 
-  it('should return the correct year', () => {
+  it('should have the correct year', () => {
     expect(day.year).toBe(2021);
   });
 
-  it('should return the correct short year', () => {
+  it('should have the correct short year', () => {
     expect(day.yearShort).toBe(21);
   });
 
-  it('should return the correct timestamp', () => {
+  it('should have the correct timestamp', () => {
     expect(day.timestamp).toBe(1621998000000);
   });
 
-  it('should return the correct week of year number', () => {
+  it('should have the correct week of year number', () => {
     expect(day.weekNumber).toBe(22);
   });
 
@@ -102,23 +103,27 @@ describe('Month Class', () => {
     month = new Month(birthday, 'en');
   });
 
-  it('should return the correct month name', () => {
+  it('should have the correct language', () => {
+    expect(month.lang).toBe('en');
+  });
+
+  it('should have the correct month name', () => {
     expect(month.name).toBe('May');
   });
 
-  it('should return the correct month number', () => {
+  it('should have the correct month number', () => {
     expect(month.monthNumber).toBe(5);
   });
 
-  it('should return the correct number of days', () => {
+  it('should have the correct year', () => {
     expect(month.year).toBe(2021);
   });
 
-  it('should return the correct number of days in month', () => {
+  it('should have the correct number of days in month', () => {
     expect(month.numberOfDays).toBe(31);
   });
 
-  it('month object should be iterable', () => {
+  it('month object should be an iterable', () => {
     expect(month[Symbol.iterator]).toBeDefined();
   });
 
@@ -136,11 +141,55 @@ describe('Month Class', () => {
     expect(month.numberOfDays).not.toBe(29);
   });
 
-  it('should return today if no date passed', () => {
+  it('should have date as today if no date passed', () => {
     const today = new Date();
     const month = new Month(null, 'en');
     expect(month.monthNumber).toBe(today.getMonth() + 1);
     expect(month.year).toBe(today.getFullYear());
     expect(month.name).toBe(today.toLocaleString('en', { month: 'long' }));
+  });
+});
+
+describe('Year Class', () => {
+  let year;
+  beforeAll(() => {
+    year = new Year(2021, 5, 'en');
+  });
+
+  it('should have the correct year', () => {
+    expect(year.year).toBe(2021);
+  });
+
+  it('should have the correct month', () => {
+    expect(year.month.monthNumber).toBe(5);
+  });
+
+  it('year object should be an iterable', () => {
+    expect(year[Symbol.iterator]).toBeDefined();
+  });
+
+  it('should have 12 months', () => {
+    expect([...year].length).toBe(12);
+  });
+
+  it('should return false if year is not a leap year', () => {
+    expect(year.isLeapYear).toBe(false);
+  });
+
+  it('should return true if year is a leap year', () => {
+    const year = new Year(2020);
+    expect(year.isLeapYear).toBe(true);
+  });
+
+  it('should have the current year if no year passed', () => {
+    const year = new Year();
+    const today = new Date();
+    expect(year.year).toBe(today.getFullYear());
+  });
+
+  it('should have the current month if no month passed', () => {
+    const year = new Year(2020);
+    const today = new Date();
+    expect(year.month.monthNumber).toBe(today.getMonth() + 1);
   });
 });
