@@ -1,6 +1,7 @@
 const Day = require('../index').Day;
 const Month = require('../index').Month;
 const Year = require('../index').Year;
+const Calendar = require('../index').Calendar;
 
 describe('Day Class', () => {
   let day;
@@ -191,5 +192,16 @@ describe('Year Class', () => {
     const year = new Year(2020);
     const today = new Date();
     expect(year.month.monthNumber).toBe(today.getMonth() + 1);
+  });
+});
+
+describe('Calendar Class', () => {
+  let calendar;
+  beforeAll(() => {
+    calendar = new Calendar(2021, 5, 'en');
+  });
+
+  it('should have the correct year', () => {
+    expect(calendar.year).toBe(2021);
   });
 });

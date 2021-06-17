@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/pedrovicentesantos/custom-date-picker#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.23",
     "jest": "^27.0.4"
   }
 }

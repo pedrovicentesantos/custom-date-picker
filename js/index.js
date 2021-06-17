@@ -195,5 +195,6 @@ class Calendar extends Year {
 module.exports = {
   Day,
   Month,
-  Year
+  Year,
+  Calendar
 };
