@@ -7,4 +7,28 @@ body {
   height: 100vh;
   display: grid;
   place-items: center;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #EEE;
+}
+
+.date-toggle {
+  cursor: pointer;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background: rgb(10, 36, 92);
+  text-transform: capitalize;
+}
+
+.calendar-dropdown {
+  display: none;
+}
+
+.calendar-dropdown.visible {
+  display: block;
 }

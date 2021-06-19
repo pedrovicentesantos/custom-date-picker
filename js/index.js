@@ -191,6 +191,51 @@ class Calendar extends Year {
   }
 }
 
+class DatePicker extends HTMLElement {
+  format = 'DD/MM/YYYY';
+  calendarPosition = 'bottom';
+  calendarVisible = false;
+  date = null;
+
+  constructor() {
+    super();
+
+    const lang = window.navigator.language;
+    const date = new Date(
+      this.date ?? (this.getAttribute('date') || Date.now())
+    );
+
+    this.date = new Day(date, lang);
+    this.calendar = new Calendar(this.date.year, this.date.monthNumber, lang);
+
+    this.format = this.getAttribute('format') || this.format;
+    this.position = DatePicker.validPositions.includes(
+      this.getAttribute('calendarPosition')
+    )
+      ? this.getAttribute('calendarPosition')
+      : this.calendarPosition;
+    this.calendarVisible =
+      this.getAttribute('calendarVisible') === '' ||
+      this.getAttribute('calendarVisible') === 'true' ||
+      this.calendarVisible;
+
+    this.render();
+  }
+
+  render() {
+    const date = this.date.format(this.format);
+    this.innerHTML = `
+      <button class="date-toggle" type="button">${date}</button>
+    `;
+  }
+
+  static get validPositions() {
+    return ['top', 'right', 'bottom', 'left'];
+  }
+}
+
+customElements.define('date-picker', DatePicker);
+
 module.exports = {
   Day,
   Month,
