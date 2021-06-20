@@ -274,7 +274,7 @@ class DatePicker extends HTMLElement {
   }
 
   hideCalendar(e) {
-    if (this.calendarVisible && !this.includes(e.target)) {
+    if (this.calendarVisible && !this.contains(e.target)) {
       this.toggleCalendar(false);
     }
   }
