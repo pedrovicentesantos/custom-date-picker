@@ -253,6 +253,7 @@ class DatePicker extends HTMLElement {
     this.toggleBtn.addEventListener('click', () => this.toggleCalendar());
     prevBtn.addEventListener('click', () => this.prevMonth());
     nextBtn.addEventListener('click', () => this.nextMonth());
+    document.addEventListener('click', (e) => this.hideCalendar(e));
   }
 
   toggleCalendar(visible = null) {
@@ -265,6 +266,12 @@ class DatePicker extends HTMLElement {
     }
 
     this.calendarVisible = this.calendarDropdown.className.includes('visible');
+  }
+
+  hideCalendar(e) {
+    if (this.calendarVisible && !this.includes(e.target)) {
+      this.toggleCalendar(false);
+    }
   }
 
   prevMonth() {
