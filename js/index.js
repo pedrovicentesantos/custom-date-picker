@@ -238,6 +238,7 @@ class DatePicker extends HTMLElement {
           <h4>${monthYear}</h4>
           <button type="button" class="next-month" aria-label="next month"></button>
         </div>
+        <div class="week-days">${this.getWeekDays()}</div>
       </div>
     `;
   }
@@ -298,6 +299,12 @@ class DatePicker extends HTMLElement {
   nextMonth() {
     this.calendar.goToNextMonth();
     this.updateHeaderText();
+  }
+
+  getWeekDays() {
+    return this.calendar.weekDays
+      .map((weekDay) => `<span>${weekDay.substring(0, 3)}</span>`)
+      .join('');
   }
 
   static get validPositions() {
