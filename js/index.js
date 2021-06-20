@@ -265,6 +265,11 @@ class DatePicker extends HTMLElement {
       this.calendarDropdown.classList.remove('visible');
     }
 
+    if (!this.isSameDateOfToggleBtn()) {
+      this.calendar.goToSpecificDate(this.date.monthNumber, this.date.year);
+      this.updateHeaderText();
+    }
+
     this.calendarVisible = this.calendarDropdown.className.includes('visible');
   }
 
@@ -274,14 +279,25 @@ class DatePicker extends HTMLElement {
     }
   }
 
+  isSameDateOfToggleBtn() {
+    return (
+      this.calendar.month.monthNumber === this.date.monthNumber &&
+      this.calendar.year === this.date.year
+    );
+  }
+
+  updateHeaderText() {
+    this.calendarDropdownHeader.textContent = this.generateMonthYear;
+  }
+
   prevMonth() {
     this.calendar.goToPreviousMonth();
-    this.calendarDropdownHeader.textContent = this.generateMonthYear;
+    this.updateHeaderText();
   }
 
   nextMonth() {
     this.calendar.goToNextMonth();
-    this.calendarDropdownHeader.textContent = this.generateMonthYear;
+    this.updateHeaderText();
   }
 
   static get validPositions() {
