@@ -13,6 +13,10 @@ body {
   background: #EEE;
 }
 
+date-picker {
+  position: relative;
+}
+
 .date-toggle {
   cursor: pointer;
   padding: 0.5em 1em;
@@ -27,8 +31,57 @@ body {
 
 .calendar-dropdown {
   display: none;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  width: 40vw;
+  height: 40vw;
+  margin-top: 0.5em;
+  padding: 1em;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .calendar-dropdown.visible {
   display: block;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h4 {
+  margin: 0;
+  text-transform: capitalize;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.header button {
+  padding: 0;
+  border: 8px solid white;
+  width: 0;
+  height: 0;
+  border-radius: 2px;
+  border-top-color: #222;
+  transform: rotate(90deg);
+  cursor: pointer;
+  position: relative;
+}
+
+.header button::after{
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2em;
+  height: 2em;
+}
+
+.header button.next-month {
+  transform: rotate(-90deg);
 }
