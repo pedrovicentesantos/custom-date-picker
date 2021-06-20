@@ -199,6 +199,7 @@ class DatePicker extends HTMLElement {
   mounted = false;
   toggleBtn = null;
   calendarDropdown = null;
+  calendarDropdownHeader = null;
 
   constructor() {
     super();
@@ -226,7 +227,7 @@ class DatePicker extends HTMLElement {
   }
 
   render() {
-    const monthYear = `${this.calendar.month.name}, ${this.calendar.year}`;
+    const monthYear = this.generateMonthYear;
     const date = this.date.format(this.format);
     this.innerHTML = `
       <button class="date-toggle" type="button">${date}</button>
@@ -245,8 +246,13 @@ class DatePicker extends HTMLElement {
     this.mounted = true;
     this.toggleBtn = document.querySelector('.date-toggle');
     this.calendarDropdown = document.querySelector('.calendar-dropdown');
+    const [prevBtn, calendarDropdownHeader, nextBtn] =
+      this.calendarDropdown.querySelector('.header').children;
+    this.calendarDropdownHeader = calendarDropdownHeader;
 
     this.toggleBtn.addEventListener('click', () => this.toggleCalendar());
+    prevBtn.addEventListener('click', () => this.prevMonth());
+    nextBtn.addEventListener('click', () => this.nextMonth());
   }
 
   toggleCalendar(visible = null) {
@@ -261,8 +267,22 @@ class DatePicker extends HTMLElement {
     this.calendarVisible = this.calendarDropdown.className.includes('visible');
   }
 
+  prevMonth() {
+    this.calendar.goToPreviousMonth();
+    this.calendarDropdownHeader.textContent = this.generateMonthYear;
+  }
+
+  nextMonth() {
+    this.calendar.goToNextMonth();
+    this.calendarDropdownHeader.textContent = this.generateMonthYear;
+  }
+
   static get validPositions() {
     return ['top', 'right', 'bottom', 'left'];
+  }
+
+  get generateMonthYear() {
+    return `${this.calendar.month.name}, ${this.calendar.year}`;
   }
 }
 
