@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest --watchAll --verbose"
   },
@@ -18,7 +19,13 @@
   },
   "homepage": "https://github.com/pedrovicentesantos/custom-date-picker#readme",
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@types/jest": "^26.0.23",
     "jest": "^27.0.4"
+  },
+  "jest": {
+    "clearMocks": true,
+    "coverageProvider": "v8",
+    "testEnvironment": "jsdom"
   }
 }
