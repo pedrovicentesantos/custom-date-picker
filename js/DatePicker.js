@@ -10,6 +10,7 @@ class DatePicker extends HTMLElement {
   toggleBtn = null;
   calendarDropdown = null;
   calendarDropdownHeader = null;
+  calendarMonthDaysContainer = null;
 
   constructor() {
     super();
@@ -49,6 +50,7 @@ class DatePicker extends HTMLElement {
           <button type="button" class="next-month" aria-label="next month"></button>
         </div>
         <div class="week-days">${this.getWeekDays()}</div>
+        <div class="month-days"></div>
       </div>
     `;
   }
@@ -60,11 +62,14 @@ class DatePicker extends HTMLElement {
     const [prevBtn, calendarDropdownHeader, nextBtn] =
       this.calendarDropdown.querySelector('.header').children;
     this.calendarDropdownHeader = calendarDropdownHeader;
+    this.calendarMonthDaysContainer =
+      this.calendarDropdown.querySelector('.month-days');
 
     this.toggleBtn.addEventListener('click', () => this.toggleCalendar());
     prevBtn.addEventListener('click', () => this.prevMonth());
     nextBtn.addEventListener('click', () => this.nextMonth());
     document.addEventListener('click', (e) => this.hideCalendar(e));
+    this.updateMonthDays();
   }
 
   toggleCalendar(visible = null) {
@@ -79,6 +84,7 @@ class DatePicker extends HTMLElement {
     if (!this.isSameDateOfToggleBtn()) {
       this.calendar.goToSpecificDate(this.date.monthNumber, this.date.year);
       this.updateHeaderText();
+      this.updateMonthDays();
     }
 
     this.calendarVisible = this.calendarDropdown.className.includes('visible');
@@ -104,17 +110,63 @@ class DatePicker extends HTMLElement {
   prevMonth() {
     this.calendar.goToPreviousMonth();
     this.updateHeaderText();
+    this.updateMonthDays();
   }
 
   nextMonth() {
     this.calendar.goToNextMonth();
     this.updateHeaderText();
+    this.updateMonthDays();
   }
 
   getWeekDays() {
     return this.calendar.weekDays
       .map((weekDay) => `<span>${weekDay.substring(0, 3)}</span>`)
       .join('');
+  }
+
+  getMonthDays() {
+    const firstDayOfMonth = this.calendar.month.getDay(1);
+    const lastMonthDays = firstDayOfMonth.weekDayNumber - 1;
+    const totalDays = this.calendar.month.numberOfDays + lastMonthDays;
+
+    const monthDays = Array.from({ length: totalDays });
+
+    for (let i = lastMonthDays; i < totalDays; i++) {
+      monthDays[i] = this.calendar.month.getDay(i - lastMonthDays + 1);
+    }
+    return monthDays;
+  }
+
+  updateMonthDays() {
+    this.calendarMonthDaysContainer.innerHTML = '';
+
+    this.getMonthDays().forEach((day) => {
+      const dayElement = document.createElement('button');
+      dayElement.className = 'month-day';
+
+      if (day) {
+        dayElement.textContent = day.dayNumber;
+
+        if (day.monthNumber === this.calendar.month.monthNumber) {
+          dayElement.classList.add('current');
+        }
+
+        if (this.isDefinedDate(day)) {
+          dayElement.classList.add('selected');
+        }
+      }
+
+      this.calendarMonthDaysContainer.appendChild(dayElement);
+    });
+  }
+
+  isDefinedDate(day) {
+    return (
+      day.dayNumber === this.date.dayNumber &&
+      day.monthNumber === this.date.monthNumber &&
+      day.year === this.calendar.year
+    );
   }
 
   static get validPositions() {
