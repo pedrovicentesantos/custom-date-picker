@@ -170,7 +170,7 @@ class DatePicker extends HTMLElement {
     return (
       day.dayNumber === this.date.dayNumber &&
       day.monthNumber === this.date.monthNumber &&
-      day.year === this.calendar.year
+      day.year === this.date.year
     );
   }
 
