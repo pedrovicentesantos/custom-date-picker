@@ -106,14 +106,14 @@ date-picker {
 .month-day {
   padding: 8px 5px;
   color: white;
+  background: #C7C9D3;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 2px;
   cursor: pointer;
   border: none;
-  /* To hide all days and display only days of current month */
-  opacity: 0;
+  opacity: 1;
 }
 
 .month-day.current {

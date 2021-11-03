@@ -83,8 +83,7 @@ class DatePicker extends HTMLElement {
 
     if (!this.isSameDateOfToggleBtn()) {
       this.calendar.goToSpecificDate(this.date.monthNumber, this.date.year);
-      this.updateHeaderText();
-      this.updateMonthDays();
+      this.renderCalendarDays();
     }
 
     this.calendarVisible = this.calendarDropdown.className.includes('visible');
@@ -109,14 +108,12 @@ class DatePicker extends HTMLElement {
 
   prevMonth() {
     this.calendar.goToPreviousMonth();
-    this.updateHeaderText();
-    this.updateMonthDays();
+    this.renderCalendarDays();
   }
 
   nextMonth() {
     this.calendar.goToNextMonth();
-    this.updateHeaderText();
-    this.updateMonthDays();
+    this.renderCalendarDays();
   }
 
   getWeekDays() {
@@ -127,13 +124,23 @@ class DatePicker extends HTMLElement {
 
   getMonthDays() {
     const firstDayOfMonth = this.calendar.month.getDay(1);
-    const lastMonthDays = firstDayOfMonth.weekDayNumber - 1;
-    const totalDays = this.calendar.month.numberOfDays + lastMonthDays;
+    const numberOfDaysPreviousMonth = firstDayOfMonth.weekDayNumber - 1;
+    const previousMonth = this.calendar.getPreviousMonth();
+    const totalDays =
+      this.calendar.month.numberOfDays + numberOfDaysPreviousMonth;
 
     const monthDays = Array.from({ length: totalDays });
 
-    for (let i = lastMonthDays; i < totalDays; i++) {
-      monthDays[i] = this.calendar.month.getDay(i - lastMonthDays + 1);
+    for (let i = numberOfDaysPreviousMonth; i < totalDays; i++) {
+      monthDays[i] = this.calendar.month.getDay(
+        i - numberOfDaysPreviousMonth + 1
+      );
+    }
+
+    for (let i = 0; i < numberOfDaysPreviousMonth; i++) {
+      monthDays[i] = previousMonth.getDay(
+        previousMonth.numberOfDays - numberOfDaysPreviousMonth + i + 1
+      );
     }
     return monthDays;
   }
@@ -145,16 +152,14 @@ class DatePicker extends HTMLElement {
       const dayElement = document.createElement('button');
       dayElement.className = 'month-day';
 
-      if (day) {
-        dayElement.textContent = day.dayNumber;
+      dayElement.textContent = day.dayNumber;
 
-        if (day.monthNumber === this.calendar.month.monthNumber) {
-          dayElement.classList.add('current');
-        }
+      if (day.monthNumber === this.calendar.month.monthNumber) {
+        dayElement.classList.add('current');
+      }
 
-        if (this.isDefinedDate(day)) {
-          dayElement.classList.add('selected');
-        }
+      if (this.isDefinedDate(day)) {
+        dayElement.classList.add('selected');
       }
 
       this.calendarMonthDaysContainer.appendChild(dayElement);
@@ -167,6 +172,11 @@ class DatePicker extends HTMLElement {
       day.monthNumber === this.date.monthNumber &&
       day.year === this.calendar.year
     );
+  }
+
+  renderCalendarDays() {
+    this.updateHeaderText();
+    this.updateMonthDays();
   }
 
   static get validPositions() {
