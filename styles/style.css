@@ -43,6 +43,24 @@ date-picker {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
+.calendar-dropdown.top {
+  top: auto;
+  bottom: 100%;
+  transform: translate(-50%, -8px);
+}
+
+.calendar-dropdown.left {
+  top: 50%;
+  left: 0;
+  transform: translate(calc(-8px + -100%), -50%);
+}
+
+.calendar-dropdown.right {
+  top: 50%;
+  left: 100%;
+  transform: translate(8px, -50%);
+}
+
 .calendar-dropdown.visible {
   display: block;
 }

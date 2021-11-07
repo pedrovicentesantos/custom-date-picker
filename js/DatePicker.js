@@ -3,7 +3,7 @@ import Calendar from './Calendar.js';
 
 class DatePicker extends HTMLElement {
   format = 'DD/MM/YYYY';
-  calendarPosition = 'top';
+  calendarPosition = 'bottom';
   calendarVisible = false;
   date = null;
   mounted = false;
@@ -26,13 +26,13 @@ class DatePicker extends HTMLElement {
 
     this.format = this.getAttribute('format') || this.format;
     this.calendarPosition = DatePicker.validPositions.includes(
-      this.getAttribute('calendarPosition')
+      this.getAttribute('position')
     )
-      ? this.getAttribute('calendarPosition')
+      ? this.getAttribute('position')
       : this.calendarPosition;
     this.calendarVisible =
-      this.getAttribute('calendarVisible') === '' ||
-      this.getAttribute('calendarVisible') === 'true' ||
+      this.getAttribute('visible') === '' ||
+      this.getAttribute('visible') === 'true' ||
       this.calendarVisible;
 
     this.render();
@@ -71,6 +71,51 @@ class DatePicker extends HTMLElement {
     nextBtn.addEventListener('click', () => this.nextMonth());
     document.addEventListener('click', (e) => this.hideCalendar(e));
     this.updateMonthDays();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(oldValue);
+    console.log(newValue);
+    if (!this.mounted) return;
+    if (oldValue && oldValue.trim() === newValue.trim()) return;
+
+    switch (name) {
+      case 'date':
+        console.log('date');
+        this.date = new Day(new Date(newValue));
+        this.calendar.goToSpecificDate(this.date.monthNumber, this.date.year);
+        this.renderCalendarDays();
+        this.updateToggleText();
+        break;
+
+      case 'format':
+        console.log('format');
+        this.format = newValue;
+        this.updateToggleText();
+        break;
+
+      case 'visible':
+        console.log('visible');
+        this.calendarVisible = ['', 'true', 'false'].includes(newValue)
+          ? newValue === '' || newValue === 'true'
+          : this.calendarVisible;
+        this.toggleCalendar(this.calendarVisible);
+        break;
+
+      case 'position':
+        console.log('position');
+        this.calendarPosition = DatePicker.validPositions.includes(newValue)
+          ? newValue
+          : this.calendarPosition;
+        this.calendarDropdown.className = `calendar-dropdown ${
+          this.calendarVisible ? 'visible' : ''
+        } ${this.calendarPosition}`;
+        break;
+    }
+  }
+
+  static get observedAttributes() {
+    return ['date', 'format', 'position', 'visible'];
   }
 
   toggleCalendar(visible = null) {
@@ -201,10 +246,10 @@ class DatePicker extends HTMLElement {
     }
 
     this.toggleCalendar();
-    this.updateTogglerText();
+    this.updateToggleText();
   }
 
-  updateTogglerText() {
+  updateToggleText() {
     const date = this.date.format(this.format);
     this.toggleBtn.textContent = date;
   }
