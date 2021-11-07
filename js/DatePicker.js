@@ -47,7 +47,7 @@ class DatePicker extends HTMLElement {
         ${this.calendarPosition}">
         <div class="header">
           <button type="button" class="prev-month" aria-label="previous month"></button>
-          <h4>${monthYear}</h4>
+          <h4 tabindex="0" aria-label="current month ${date}">${monthYear}</h4>
           <button type="button" class="next-month" aria-label="next month"></button>
         </div>
         <div class="week-days">${this.getWeekDays()}</div>
@@ -88,6 +88,12 @@ class DatePicker extends HTMLElement {
     }
 
     this.calendarVisible = this.calendarDropdown.className.includes('visible');
+
+    if (this.calendarVisible) {
+      this.calendarDropdownHeader.focus();
+    } else {
+      this.toggleBtn.focus();
+    }
   }
 
   hideCalendar(e) {
@@ -105,16 +111,22 @@ class DatePicker extends HTMLElement {
 
   updateHeaderText() {
     this.calendarDropdownHeader.textContent = this.generateMonthYear;
+    this.calendarDropdownHeader.setAttribute(
+      'aria-label',
+      `current month ${this.date.format(this.format)}`
+    );
   }
 
   prevMonth() {
     this.calendar.goToPreviousMonth();
     this.renderCalendarDays();
+    this.calendarDropdownHeader.focus();
   }
 
   nextMonth() {
     this.calendar.goToNextMonth();
     this.renderCalendarDays();
+    this.calendarDropdownHeader.focus();
   }
 
   getWeekDays() {
@@ -158,6 +170,8 @@ class DatePicker extends HTMLElement {
       dayElement.addEventListener('click', (e) => {
         this.selectDay(e, day);
       });
+
+      dayElement.setAttribute('aria-label', day.format(this.format));
 
       if (day.monthNumber === this.calendar.month.monthNumber) {
         dayElement.classList.add('current');
