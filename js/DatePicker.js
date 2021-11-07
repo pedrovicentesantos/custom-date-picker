@@ -11,6 +11,7 @@ class DatePicker extends HTMLElement {
   calendarDropdown = null;
   calendarDropdownHeader = null;
   calendarMonthDaysContainer = null;
+  selectedDayElement = null;
 
   constructor() {
     super();
@@ -154,19 +155,47 @@ class DatePicker extends HTMLElement {
 
       dayElement.textContent = day.dayNumber;
 
+      dayElement.addEventListener('click', (e) => {
+        this.selectDay(e, day);
+      });
+
       if (day.monthNumber === this.calendar.month.monthNumber) {
         dayElement.classList.add('current');
       }
 
-      if (this.isDefinedDate(day)) {
+      if (this.isSelectedDay(day)) {
         dayElement.classList.add('selected');
+        this.selectedDayElement = dayElement;
       }
 
       this.calendarMonthDaysContainer.appendChild(dayElement);
     });
   }
 
-  isDefinedDate(day) {
+  selectDay(e, day) {
+    if (day.isEqual(this.date)) {
+      return;
+    }
+
+    e.target.classList.add('selected');
+    this.selectedDayElement.classList.remove('selected');
+    this.date = day;
+    this.selectedDayElement = e.target;
+
+    if (day.monthNumber !== this.calendar.month.monthNumber) {
+      this.prevMonth();
+    }
+
+    this.toggleCalendar();
+    this.updateTogglerText();
+  }
+
+  updateTogglerText() {
+    const date = this.date.format(this.format);
+    this.toggleBtn.textContent = date;
+  }
+
+  isSelectedDay(day) {
     return (
       day.dayNumber === this.date.dayNumber &&
       day.monthNumber === this.date.monthNumber &&
