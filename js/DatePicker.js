@@ -74,14 +74,11 @@ class DatePicker extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(oldValue);
-    console.log(newValue);
     if (!this.mounted) return;
     if (oldValue && oldValue.trim() === newValue.trim()) return;
 
     switch (name) {
       case 'date':
-        console.log('date');
         this.date = new Day(new Date(newValue));
         this.calendar.goToSpecificDate(this.date.monthNumber, this.date.year);
         this.renderCalendarDays();
@@ -89,13 +86,11 @@ class DatePicker extends HTMLElement {
         break;
 
       case 'format':
-        console.log('format');
         this.format = newValue;
         this.updateToggleText();
         break;
 
       case 'visible':
-        console.log('visible');
         this.calendarVisible = ['', 'true', 'false'].includes(newValue)
           ? newValue === '' || newValue === 'true'
           : this.calendarVisible;
@@ -103,7 +98,6 @@ class DatePicker extends HTMLElement {
         break;
 
       case 'position':
-        console.log('position');
         this.calendarPosition = DatePicker.validPositions.includes(newValue)
           ? newValue
           : this.calendarPosition;
