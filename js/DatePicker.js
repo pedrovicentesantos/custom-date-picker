@@ -45,10 +45,13 @@ class DatePicker extends HTMLElement {
       <button class="date-toggle" type="button">${date}</button>
       <div class="calendar-dropdown ${this.calendarVisible ? 'visible' : ''} 
         ${this.calendarPosition}">
-        <div class="header">
-          <button type="button" class="prev-month" aria-label="previous month"></button>
-          <h4 tabindex="0" aria-label="current month ${date}">${monthYear}</h4>
-          <button type="button" class="next-month" aria-label="next month"></button>
+        <div class="header-group">
+          <div class="header">
+            <button type="button" class="prev-month" aria-label="previous month"></button>
+            <h4 tabindex="0" aria-label="current month ${date}">${monthYear}</h4>
+            <button type="button" class="next-month" aria-label="next month"></button>
+          </div>
+          <button type="button" class="today">Today</button>
         </div>
         <div class="week-days">${this.getWeekDays()}</div>
         <div class="month-days"></div>
@@ -60,8 +63,10 @@ class DatePicker extends HTMLElement {
     this.mounted = true;
     this.toggleBtn = document.querySelector('.date-toggle');
     this.calendarDropdown = document.querySelector('.calendar-dropdown');
-    const [prevBtn, calendarDropdownHeader, nextBtn] =
-      this.calendarDropdown.querySelector('.header').children;
+    const [header, todayBtn] =
+      this.calendarDropdown.querySelector('.header-group').children;
+    const [prevBtn, calendarDropdownHeader, nextBtn] = header.children;
+
     this.calendarDropdownHeader = calendarDropdownHeader;
     this.calendarMonthDaysContainer =
       this.calendarDropdown.querySelector('.month-days');
@@ -69,6 +74,7 @@ class DatePicker extends HTMLElement {
     this.toggleBtn.addEventListener('click', () => this.toggleCalendar());
     prevBtn.addEventListener('click', () => this.prevMonth());
     nextBtn.addEventListener('click', () => this.nextMonth());
+    todayBtn.addEventListener('click', () => this.goToToday());
     document.addEventListener('click', (e) => this.hideCalendar(e));
     this.updateMonthDays();
   }
@@ -254,6 +260,13 @@ class DatePicker extends HTMLElement {
       day.monthNumber === this.date.monthNumber &&
       day.year === this.date.year
     );
+  }
+
+  goToToday() {
+    this.date = new Day(new Date());
+    this.renderCalendarDays();
+    this.toggleCalendar();
+    this.updateToggleText();
   }
 
   renderCalendarDays() {

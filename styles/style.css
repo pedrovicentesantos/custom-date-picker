@@ -65,7 +65,13 @@ date-picker {
   display: block;
 }
 
+.header-group {
+  display: flex;
+  justify-content: space-between;
+}
+
 .header {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -102,6 +108,15 @@ date-picker {
 
 .header button.next-month {
   transform: rotate(-90deg);
+}
+
+.today {
+  font-weight: bold;
+  color: white;
+  background: rgb(10, 36, 92);
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
 }
 
 .week-days {
