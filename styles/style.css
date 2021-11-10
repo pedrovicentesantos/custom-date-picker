@@ -32,10 +32,13 @@ date-picker {
 .calendar-dropdown {
   display: none;
   position: absolute;
+  top: 20%;
   left: 50%;
   transform: translate(-50%);
   width: 40vw;
+  min-width: 300px;
   height: 40vw;
+  min-height: 280px;
   margin-top: 0.5em;
   padding: 1em;
   background: white;
@@ -45,20 +48,12 @@ date-picker {
 
 .calendar-dropdown.top {
   top: auto;
-  bottom: 100%;
-  transform: translate(-50%, -8px);
+  bottom: 30%;
 }
 
-.calendar-dropdown.left {
-  top: 50%;
-  left: 0;
-  transform: translate(calc(-8px + -100%), -50%);
-}
-
-.calendar-dropdown.right {
-  top: 50%;
-  left: 100%;
-  transform: translate(8px, -50%);
+.calendar-dropdown.left, .calendar-dropdown.right {
+  bottom: -200%;
+  top: auto;
 }
 
 .calendar-dropdown.visible {
@@ -112,8 +107,8 @@ date-picker {
 
 .today {
   font-weight: bold;
-  color: white;
-  background: rgb(10, 36, 92);
+  background: none;
+  color: rgb(10, 36, 92);
   border: none;
   padding: 0.25rem;
   cursor: pointer;
@@ -130,14 +125,14 @@ date-picker {
 }
 
 .month-days {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
 }
 
 .month-day {
-  padding: 8px 5px;
+  padding: 5px;
   color: white;
   background: #C7C9D3;
   display: flex;
@@ -160,4 +155,87 @@ date-picker {
 
 .month-day.current:hover {
   background: #374c99;
+}
+
+@media only screen and (min-width: 360px) {
+  .calendar-dropdown {
+    top: auto;
+    min-width: 320px;
+    min-height: 280px;
+  }
+
+  .calendar-dropdown.top {
+    top: auto;
+    bottom: 110%;
+  }
+
+  .calendar-dropdown.left, .calendar-dropdown.right {
+    left: 50%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .calendar-dropdown {
+    top: 125%;
+  }
+
+  .calendar-dropdown.top {
+    top: auto;
+    bottom: 125%;
+  }
+
+  .calendar-dropdown.right {
+    right: auto;
+    left: 145%;
+  }
+  
+  .calendar-dropdown.left {
+    right: 0;
+    left: auto;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .calendar-dropdown {
+    max-width: 420px;
+    max-height: 360px;
+  }
+
+  .month-days {
+    margin-top: 1.5rem;
+  }
+
+  .month-day {
+    padding: 10px 5px;
+  }
+
+  .calendar-dropdown.right {
+    right: auto;
+    left: 180%;
+  }
+}
+
+@media only screen and (min-width: 1120px) {
+  .calendar-dropdown {
+    max-width: 420px;
+    max-height: 360px;
+  }
+
+  .month-days {
+    margin-top: 1.5rem;
+  }
+
+  .month-day {
+    padding: 10px 5px;
+  }
+
+  .calendar-dropdown.right {
+    right: auto;
+    left: 200%;
+  }
+
+  .calendar-dropdown.left {
+    left: auto;
+    right: 15%;
+  }
 }
